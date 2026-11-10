@@ -1,0 +1,50 @@
+experiment:
+  dataset: Laion
+  model: FLUX2_Klein_9B
+  position: raw_block_output_image_tokens
+  points:
+    - {name: layer5_step0, layer: 5, step: 0}
+    - {name: layer5_step3, layer: 5, step: 3}
+    - {name: layer15_step0, layer: 15, step: 0}
+    - {name: layer15_step3, layer: 15, step: 3}
+    - {name: layer30_step0, layer: 30, step: 0}
+    - {name: layer30_step3, layer: 30, step: 3}
+
+representations:
+  format: webdataset_tar
+  source: flux2
+  path_template: data/representations/laion_coco/flux2_klein/from_0_to_10000/layer_{layer}.tar
+  field: output.pth
+  saved_steps: [0, 3]
+  step: "{step}"
+  selected_ids_path_template: saved_models/laion/flux2-klein/{architecture}/layer_{layer}_step_{step}/sampling/solve_indices.pth
+  expected_samples: 300000
+  max_samples: 300000
+  patch_grid: [8, 8]
+  global_id_definition: sample_id * 64 + patch_idx
+
+preprocessing:
+  normalization: rms
+  eps: 1.0e-8
+
+sae:
+  source: trained
+  run_dir_template: saved_models/laion/flux2-klein/{architecture}/layer_{layer}_step_{step}
+
+evaluation:
+  device: cuda
+  stats_batch_size: 16384
+  inference_batch_size: 4096
+  save_sparse_activations: true
+  stability:
+    max_mu_samples: 5000000
+    pair_batch_size: 100000
+    random_seed: 42
+    save_mu_samples: false
+    metric_policy: auto
+    singular_policy: pinv
+    full_metric_chunk_size: 4096
+
+output:
+  root: results/fidelity_stability/Laion/FLUX2_Klein_9B/{architecture}
+  subdir_template: "layer{layer}_step{step}/Sample300000"

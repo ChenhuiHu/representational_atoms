@@ -1,0 +1,18 @@
+runs:
+- dataset: HowNet
+  model: google/gemma-2-2b
+  sae: BiJumpReLU
+  variant: ''
+  root: results/fidelity_stability/HowNet/gemma2_2b/bijumprelu
+- dataset: HowNet
+  model: google/gemma-2-9b
+  sae: BiJumpReLU
+  variant: ''
+  root: results/fidelity_stability/HowNet/gemma2_9b/bijumprelu
+- dataset: HowNet
+  model: meta-llama/Meta-Llama-3.1-8B
+  sae: BiJumpReLU
+  variant: ''
+  root: results/fidelity_stability/HowNet/llama3_1_8b/bijumprelu
+output:
+  dir: results/fidelity_stability/HowNet/table_results

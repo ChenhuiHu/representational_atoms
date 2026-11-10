@@ -1,0 +1,40 @@
+experiment:
+  dataset: HowNet
+  model: google/gemma-2-9b
+  position: post_feedforward_layernorm_output
+  layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+  allowed_architectures: [bijumprelu]
+
+data:
+  format: layer_shards
+  path_template: data/representations/hownet/google__gemma-2-9b/post_feedforward_layernorm_output/layer_{layer}
+  max_samples: null
+
+preprocessing:
+  # Formal v6 default requested for the HowNet retraining runs.
+  normalization: rms
+  eps: 1.0e-8
+  svd_eps: 1.0e-6
+
+sae:
+  expansion_factor: 40
+
+training:
+  device: cuda
+  num_epochs: 100000
+  batch_size: 4096
+  logical_batch_size: 4096
+  learning_rate: 2.0e-4
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  eval_every: 20
+  log_every: 80
+  eval_batch_size: 4096
+
+selection:
+  max_l0_for_save: 20
+  first_save_l0: 10
+  first_save_r2: 0.90
+
+output:
+  dir_template: saved_models/hownet/gemma2_9b/{architecture}/layer_{layer}

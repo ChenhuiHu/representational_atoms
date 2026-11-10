@@ -1,0 +1,28 @@
+experiment:
+  dataset: Wikipedia
+  model: google/gemma-2-9b
+  position: post_feedforward_layernorm_output
+  layers: [0, 8, 16, 24, 32, 40]
+sae:
+  architecture: bijumprelu
+sparse_activations:
+  path_template: results/fidelity_stability/Wikipedia/gemma2-9b/{architecture}/layer_{layer}/sae_activations.pt
+source:
+  type: wikipedia
+  representation_root: data/representations/wikipedia/google__gemma-2-9b/post_feedforward_layernorm_output
+  tokenizer: google/gemma-2-9b
+  context_window: 32
+candidate_mining:
+  top_k_examples: 10000
+  min_feature_occurrences: 1
+  feature_pool_size: null
+  feature_pool_seed: 42
+review:
+  example_source: top_absolute_examples
+  features_per_condition: 10
+  examples_per_feature: 10
+  random_seed: 42
+  judge: llm_as_judge_with_manual_verification
+  score_definition: largest_coherent_group_fraction
+output:
+  root: results/monosemanticity/Wikipedia/gemma2-9b/{architecture}

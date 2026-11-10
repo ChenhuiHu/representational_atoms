@@ -1,0 +1,53 @@
+experiment:
+  dataset: Laion
+  model: SD15
+  position: unet.mid_block.attentions.0
+  points:
+    - {name: cond_t0, branch: cond, timestep: 0}
+    - {name: cond_t500, branch: cond, timestep: 500}
+    - {name: cond_t1000, branch: cond, timestep: 1000}
+
+representations:
+  # Direct evaluation from the extraction tar; no parsed_output_dicts intermediate.
+  format: webdataset_tar
+  source: sd15
+  path_template: data/representations/laion_coco/sd15/from_0_to_10000/unet.mid_block.attentions.0.tar
+  field: output.pth
+  saved_features: both
+  branch: "{branch}"
+  saved_timesteps: [0, 500, 1000]
+  timestep: "{timestep}"
+  spatial_layout: chw
+  selected_ids_path_template: saved_models/laion/sd15/{architecture}/{branch}_t{timestep}/sampling/solve_indices.pth
+  expected_samples: 300000
+  max_samples: 300000
+  patch_grid: [8, 8]
+  global_id_definition: sample_id * 64 + patch_idx
+  # To reproduce historical parsed dictionaries instead, set format to
+  # legacy_spatial_dict and point path_template at cond_t*.pth.
+
+preprocessing:
+  normalization: rms
+  eps: 1.0e-8
+
+sae:
+  source: trained
+  run_dir_template: saved_models/laion/sd15/{architecture}/{branch}_t{timestep}
+
+evaluation:
+  device: cuda
+  stats_batch_size: 16384
+  inference_batch_size: 4096
+  save_sparse_activations: true
+  stability:
+    max_mu_samples: 5000000
+    pair_batch_size: 100000
+    random_seed: 42
+    save_mu_samples: false
+    metric_policy: auto
+    singular_policy: pinv
+    full_metric_chunk_size: 4096
+
+output:
+  root: results/fidelity_stability/Laion/SD15/{architecture}
+  subdir_template: "{branch}_t{timestep}/Sample300000"

@@ -1,0 +1,33 @@
+# Example: Olmo-Hybrid-7B, layer 30.
+data:
+  format: layer_shards
+  path: data/representations/wikidata/allenai__Olmo-Hybrid-7B/down_proj_output/layer_30
+  max_samples: 300000
+
+preprocessing:
+  normalization: rms
+  eps: 1.0e-8
+  svd_eps: 1.0e-6
+
+sae:
+  expansion_factor: 58
+
+training:
+  device: cuda
+  num_epochs: 100000
+  batch_size: 4096
+  logical_batch_size: 4096
+  learning_rate: 2.0e-4
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  eval_every: 20
+  log_every: 80
+  eval_batch_size: 4096
+
+selection:
+  max_l0_for_save: 20
+  first_save_l0: 10
+  first_save_r2: 0.90
+
+output:
+  dir: saved_models/wikidata/olmo-hybrid-7b/{architecture}/layer_30

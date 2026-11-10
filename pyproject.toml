@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "representational-atoms"
+version = "0.7.0"
+description = "Code for extracting, learning, and evaluating representational atoms in neural networks."
+requires-python = ">=3.10"
+dependencies = [
+  "torch",
+  "transformers",
+  "datasets",
+  "diffusers",
+  "accelerate",
+  "webdataset",
+  "numpy",
+  "tqdm",
+  "PyYAML",
+  "scipy",
+  "Pillow",
+  "OpenHowNet",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

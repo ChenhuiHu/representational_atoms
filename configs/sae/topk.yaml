@@ -1,0 +1,8 @@
+sae:
+  architecture: topk
+  k: 50
+  use_pre_encoder_bias: true
+  fix_decoder_norms: true
+selection:
+  mode: best_r2
+  improvement_window: 600

@@ -1,0 +1,37 @@
+experiment:
+  dataset: Wikidata
+  model: google/gemma-2-9b
+  position: post_feedforward_layernorm_output
+  layers: [0, 8, 16, 24, 32, 40]
+
+representations:
+  format: layer_shards
+  path_template: data/representations/wikidata/google__gemma-2-9b/post_feedforward_layernorm_output/layer_{layer}
+  max_samples: 300000
+
+preprocessing:
+  normalization: none
+  eps: 1.0e-8
+
+sae:
+  source: gemmascope
+  architecture: gemmascope
+  variant: width_16k
+  parameter_path_template: external/GemmaScope/google/gemma-2-9b/width_16k/layer_{layer}.npz
+
+evaluation:
+  device: cuda
+  stats_batch_size: 16384
+  inference_batch_size: 4096
+  save_sparse_activations: true
+  stability:
+    max_mu_samples: 5000000
+    pair_batch_size: 500000
+    random_seed: 42
+    save_mu_samples: false
+    metric_policy: auto
+    singular_policy: pinv
+    full_metric_chunk_size: 4096
+
+output:
+  root: results/fidelity_stability/Wikidata/gemma2-9b/GemmaScope/width_16k

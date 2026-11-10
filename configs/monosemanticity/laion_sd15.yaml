@@ -1,0 +1,31 @@
+experiment:
+  dataset: Laion
+  model: SD15
+  position: unet.mid_block.attentions.0
+  points:
+    - {name: cond_t0, branch: cond, timestep: 0}
+    - {name: cond_t500, branch: cond, timestep: 500}
+    - {name: cond_t1000, branch: cond, timestep: 1000}
+sae:
+  architecture: bijumprelu
+sparse_activations:
+  path_template: results/fidelity_stability/Laion/SD15/{architecture}/{branch}_t{timestep}/Sample300000/sae_activations.pt
+source:
+  type: spatial
+  patch_grid: [8, 8]
+  image_archive: data/representations/laion_coco/sd15/from_0_to_10000/images.tar
+candidate_mining:
+  top_k_examples: 10000
+  min_feature_occurrences: 1
+  feature_pool_size: 500
+  feature_pool_seed: 42
+review:
+  example_source: top_absolute_examples
+  features_per_condition: 10
+  examples_per_feature: 10
+  random_seed: 42
+  judge: manual
+  score_definition: largest_coherent_group_fraction
+output:
+  root: results/monosemanticity/Laion/SD15/{architecture}
+  subdir_template: "{branch}_t{timestep}/Sample300000"

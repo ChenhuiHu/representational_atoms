@@ -1,0 +1,81 @@
+runs:
+- dataset: Laion
+  model: SD15
+  sae: ReLU
+  variant: ''
+  root: results/fidelity_stability/Laion/SD15/relu
+  points: &id001
+  - name: cond_t0
+    path: cond_t0/Sample300000
+  - name: cond_t500
+    path: cond_t500/Sample300000
+  - name: cond_t1000
+    path: cond_t1000/Sample300000
+- dataset: Laion
+  model: SD15
+  sae: TopK
+  variant: K50
+  root: results/fidelity_stability/Laion/SD15/topk
+  points: *id001
+- dataset: Laion
+  model: SD15
+  sae: AbsTopK
+  variant: K50
+  root: results/fidelity_stability/Laion/SD15/abstopk
+  points: *id001
+- dataset: Laion
+  model: SD15
+  sae: JumpReLU
+  variant: ''
+  root: results/fidelity_stability/Laion/SD15/jumprelu
+  points: *id001
+- dataset: Laion
+  model: SD15
+  sae: BiJumpReLU
+  variant: ''
+  root: results/fidelity_stability/Laion/SD15/bijumprelu
+  points: *id001
+- dataset: Laion
+  model: FLUX2_Klein_9B
+  sae: ReLU
+  variant: ''
+  root: results/fidelity_stability/Laion/FLUX2_Klein_9B/relu
+  points: &id002
+  - name: layer5_step0
+    path: layer5_step0/Sample300000
+  - name: layer5_step3
+    path: layer5_step3/Sample300000
+  - name: layer15_step0
+    path: layer15_step0/Sample300000
+  - name: layer15_step3
+    path: layer15_step3/Sample300000
+  - name: layer30_step0
+    path: layer30_step0/Sample300000
+  - name: layer30_step3
+    path: layer30_step3/Sample300000
+- dataset: Laion
+  model: FLUX2_Klein_9B
+  sae: TopK
+  variant: K50
+  root: results/fidelity_stability/Laion/FLUX2_Klein_9B/topk
+  points: *id002
+- dataset: Laion
+  model: FLUX2_Klein_9B
+  sae: AbsTopK
+  variant: K50
+  root: results/fidelity_stability/Laion/FLUX2_Klein_9B/abstopk
+  points: *id002
+- dataset: Laion
+  model: FLUX2_Klein_9B
+  sae: JumpReLU
+  variant: ''
+  root: results/fidelity_stability/Laion/FLUX2_Klein_9B/jumprelu
+  points: *id002
+- dataset: Laion
+  model: FLUX2_Klein_9B
+  sae: BiJumpReLU
+  variant: ''
+  root: results/fidelity_stability/Laion/FLUX2_Klein_9B/bijumprelu
+  points: *id002
+output:
+  dir: results/fidelity_stability/Laion/table_results

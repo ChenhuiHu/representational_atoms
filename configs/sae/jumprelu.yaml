@@ -1,0 +1,9 @@
+sae:
+  architecture: jumprelu
+  sparsity_coefficient: 5.0
+  threshold_init: 0.5
+  bandwidth: 2.0
+  use_pre_encoder_bias: true
+  fix_decoder_norms: true
+selection:
+  mode: legacy_pareto

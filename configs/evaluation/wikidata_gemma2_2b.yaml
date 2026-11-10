@@ -1,0 +1,40 @@
+experiment:
+  dataset: Wikidata
+  model: google/gemma-2-2b
+  position: post_feedforward_layernorm_output
+  layers: [0, 5, 10, 15, 20, 25]
+
+representations:
+  # Preferred public-repository format emitted by the refactored extractor.
+  format: layer_shards
+  path_template: data/representations/wikidata/google__gemma-2-2b/post_feedforward_layernorm_output/layer_{layer}
+  max_samples: 300000
+  # Historical notebooks can be reproduced with:
+  # format: legacy_entity_dict
+  # path_template: data/Representation/discrete_wikidata/post_feedforward_layernorm_output/google/gemma-2-2b/Wikidata/layer_{layer}.pt
+
+preprocessing:
+  # v6 standardization: match the RMS preprocessing used by the shared training scripts.
+  normalization: rms
+  eps: 1.0e-8
+
+sae:
+  source: trained
+  run_dir_template: saved_models/wikidata/gemma2-2b/{architecture}/layer_{layer}
+
+evaluation:
+  device: cuda
+  stats_batch_size: 16384
+  inference_batch_size: 4096
+  save_sparse_activations: true
+  stability:
+    max_mu_samples: 5000000
+    pair_batch_size: 500000
+    random_seed: 42
+    save_mu_samples: false
+    metric_policy: auto
+    singular_policy: pinv
+    full_metric_chunk_size: 4096
+
+output:
+  root: results/fidelity_stability/Wikidata/gemma2-2b/{architecture}

@@ -1,0 +1,29 @@
+runs:
+  - dataset: Wikipedia
+    model: google/gemma-2-2b
+    sae: BiJumpReLU
+    variant: ""
+    root: results/fidelity_stability/Wikipedia/gemma2-2b/bijumprelu
+  - dataset: Wikipedia
+    model: google/gemma-2-2b
+    sae: JumpReLU
+    variant: ""
+    root: results/fidelity_stability/Wikipedia/gemma2-2b/jumprelu
+  - dataset: Wikipedia
+    model: google/gemma-2-2b
+    sae: ReLU
+    variant: ""
+    root: results/fidelity_stability/Wikipedia/gemma2-2b/relu
+  - dataset: Wikipedia
+    model: google/gemma-2-2b
+    sae: TopK
+    variant: K50
+    root: results/fidelity_stability/Wikipedia/gemma2-2b/topk
+  - dataset: Wikipedia
+    model: google/gemma-2-2b
+    sae: AbsTopK
+    variant: K50
+    root: results/fidelity_stability/Wikipedia/gemma2-2b/abstopk
+
+output:
+  dir: results/fidelity_stability/Wikipedia/table_results

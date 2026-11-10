@@ -1,0 +1,39 @@
+experiment:
+  dataset: HowNet
+  model: google/gemma-2-2b
+  position: post_feedforward_layernorm_output
+  layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+
+representations:
+  format: layer_shards
+  path_template: data/representations/hownet/google__gemma-2-2b/post_feedforward_layernorm_output/layer_{layer}
+  max_samples: null
+  # Historical 7.* notebooks used legacy_entity_dict files under
+  # data/Representation/.../HowNet(all_en)/layer_{layer}.pt.
+
+preprocessing:
+  # Must match the formal v6 HowNet training configs. The supplied historical
+  # 7.1--7.3 notebooks instead divided by one global standard deviation.
+  normalization: rms
+  eps: 1.0e-8
+
+sae:
+  source: trained
+  run_dir_template: saved_models/hownet/gemma2_2b/{architecture}/layer_{layer}
+
+evaluation:
+  device: cuda
+  stats_batch_size: 16384
+  inference_batch_size: 4096
+  save_sparse_activations: true
+  stability:
+    max_mu_samples: 5000000
+    pair_batch_size: 500000
+    random_seed: 42
+    save_mu_samples: false
+    metric_policy: auto
+    singular_policy: pinv
+    full_metric_chunk_size: 4096
+
+output:
+  root: results/fidelity_stability/HowNet/gemma2_2b/{architecture}

@@ -1,0 +1,5 @@
+sae:
+  architecture: relu
+  sparsity_coefficient: 5.0
+  use_pre_encoder_bias: true
+  fix_decoder_norms: true

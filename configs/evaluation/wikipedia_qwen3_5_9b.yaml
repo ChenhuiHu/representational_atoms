@@ -1,0 +1,36 @@
+experiment:
+  dataset: Wikipedia
+  model: Qwen/Qwen3.5-9B
+  position: down_proj_output
+  layers: [0, 6, 12, 18, 24, 30]
+
+representations:
+  format: layer_shards
+  path_template: data/representations/wikipedia/Qwen__Qwen3.5-9B/down_proj_output/layer_{layer}
+  max_samples: 300000
+
+# Matches Qwen/unnormalized-site training: per-vector RMS normalization.
+preprocessing:
+  normalization: rms
+  eps: 1.0e-8
+
+sae:
+  source: trained
+  run_dir_template: saved_models/wikipedia/qwen3.5-9b/{architecture}/layer_{layer}
+
+evaluation:
+  device: cuda
+  stats_batch_size: 16384
+  inference_batch_size: 4096
+  save_sparse_activations: true
+  stability:
+    max_mu_samples: 5000000
+    pair_batch_size: 100000
+    random_seed: 42
+    save_mu_samples: false
+    metric_policy: auto
+    singular_policy: pinv
+    full_metric_chunk_size: 4096
+
+output:
+  root: results/fidelity_stability/Wikipedia/qwen3.5-9b/{architecture}

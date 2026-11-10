@@ -1,0 +1,42 @@
+data:
+  # Directly reads the WebDataset tar emitted by configs/extraction/sd15.yaml.
+  format: webdataset_tar
+  source: sd15
+  path: data/representations/laion_coco/sd15/from_0_to_10000/unet.mid_block.attentions.0.tar
+  field: output.pth
+  saved_features: both
+  branch: cond
+  saved_timesteps: [0, 500, 1000]
+  timestep: 0
+  spatial_layout: chw
+  sample_size: 300000
+  test_size: 16384
+  sampling_seed: 42
+
+preprocessing:
+  normalization: rms
+  eps: 1.0e-8
+  svd_eps: 1.0e-6
+
+sae:
+  expansion_factor: 172
+
+training:
+  device: cuda
+  num_epochs: 100000
+  batch_size: 4096
+  logical_batch_size: 4096
+  learning_rate: 2.0e-4
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  eval_every: 20
+  log_every: 80
+  eval_batch_size: 4096
+
+selection:
+  max_l0_for_save: 20
+  first_save_l0: 10
+  first_save_r2: 0.90
+
+output:
+  dir: saved_models/laion/sd15/{architecture}/cond_t0

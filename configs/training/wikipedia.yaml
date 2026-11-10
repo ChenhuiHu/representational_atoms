@@ -1,0 +1,33 @@
+# Example: Qwen3.5-9B, layer 0. Override data.path / output.dir / layer as needed.
+data:
+  format: layer_shards
+  path: data/representations/wikipedia/Qwen__Qwen3.5-9B/down_proj_output/layer_0
+  max_samples: 300000
+
+preprocessing:
+  normalization: rms
+  eps: 1.0e-8
+  svd_eps: 1.0e-6
+
+sae:
+  expansion_factor: 54
+
+training:
+  device: cuda
+  num_epochs: 100000
+  batch_size: 4096
+  logical_batch_size: 4096
+  learning_rate: 2.0e-4
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  eval_every: 20
+  log_every: 80
+  eval_batch_size: 4096
+
+selection:
+  max_l0_for_save: 20
+  first_save_l0: 10
+  first_save_r2: 0.90
+
+output:
+  dir: saved_models/wikipedia/qwen3.5-9b/{architecture}/layer_0

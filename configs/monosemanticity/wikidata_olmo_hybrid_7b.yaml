@@ -1,0 +1,27 @@
+experiment:
+  dataset: Wikidata
+  model: allenai/Olmo-Hybrid-7B
+  position: down_proj_output
+  layers: [0, 6, 12, 18, 24, 30]
+sae:
+  architecture: bijumprelu
+sparse_activations:
+  path_template: results/fidelity_stability/Wikidata/olmo-hybrid-7b/{architecture}/layer_{layer}/sae_activations.pt
+source:
+  type: entity
+  format: layer_shards
+  path_template: data/representations/wikidata/allenai__Olmo-Hybrid-7B/down_proj_output/layer_{layer}
+candidate_mining:
+  top_k_examples: 10000
+  min_feature_occurrences: 1
+  feature_pool_size: 500
+  feature_pool_seed: 42
+review:
+  example_source: top_absolute_examples
+  features_per_condition: 10
+  examples_per_feature: 10
+  random_seed: 42
+  judge: llm_as_judge_with_manual_verification
+  score_definition: largest_coherent_group_fraction
+output:
+  root: results/monosemanticity/Wikidata/olmo-hybrid-7b/{architecture}

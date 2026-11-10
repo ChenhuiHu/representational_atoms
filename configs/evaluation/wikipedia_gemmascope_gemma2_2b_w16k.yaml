@@ -1,0 +1,38 @@
+experiment:
+  dataset: Wikipedia
+  model: google/gemma-2-2b
+  position: post_feedforward_layernorm_output
+  layers: [0, 5, 10, 15, 20, 25]
+
+representations:
+  format: layer_shards
+  path_template: data/representations/wikipedia/google__gemma-2-2b/post_feedforward_layernorm_output/layer_{layer}
+  max_samples: 300000
+
+# GemmaScope consumes the raw Gemma representation directly in the supplied notebooks.
+preprocessing:
+  normalization: none
+  eps: 1.0e-8
+
+sae:
+  source: gemmascope
+  architecture: gemmascope
+  variant: width_16k
+  parameter_path_template: external/GemmaScope/google/gemma-2-2b/width_16k/layer_{layer}.npz
+
+evaluation:
+  device: cuda
+  stats_batch_size: 16384
+  inference_batch_size: 4096
+  save_sparse_activations: true
+  stability:
+    max_mu_samples: 5000000
+    pair_batch_size: 500000
+    random_seed: 42
+    save_mu_samples: false
+    metric_policy: auto
+    singular_policy: pinv
+    full_metric_chunk_size: 4096
+
+output:
+  root: results/fidelity_stability/Wikipedia/gemma2-2b/GemmaScope/width_16k

@@ -1,0 +1,44 @@
+extractor: flux2
+
+model:
+  path: ./FLUX.2-klein-9B
+  dtype: bfloat16
+  local_files_only: true
+
+dataset:
+  name: laion_coco
+  path: ./laion-coco-aesthetic
+  split: train
+  streaming: true
+  shuffle_seed: 42
+
+extraction:
+  layers: [5, 15, 30]
+  steps: [0, 3]
+  dataset_batch_size: 1
+  start: 0
+  finish: 10000
+  hidden_dim: 4096
+  native_patch_grid: [8, 8]
+  max_sequence_length: 512
+  text_hidden_state_layers: [9, 18, 27]
+
+generation:
+  num_inference_steps: 4
+  height: 128
+  width: 128
+  guidance_scale: 1.0
+
+runtime:
+  transformer_device_map: auto
+  # Optional machine-specific settings used in the original experiments:
+  # transformer_max_memory:
+  #   0: 17GiB
+  #   1: 21GiB
+  #   2: 1GiB
+  #   cpu: 64GiB
+  text_encoder_device: auto
+
+output:
+  root: data/representations
+  save_images: true

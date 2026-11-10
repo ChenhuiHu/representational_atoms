@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+data/representations/
+saved_models/
+results/
+*.tar

@@ -1,0 +1,30 @@
+experiment:
+  dataset: HowNet
+  model: google/gemma-2-2b
+  position: post_feedforward_layernorm_output
+  layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+sae:
+  architecture: bijumprelu
+sparse_activations:
+  path_template: results/fidelity_stability/HowNet/gemma2_2b/{architecture}/layer_{layer}/sae_activations.pt
+source:
+  type: entity
+  entity_source: HowNet
+  format: layer_shards
+  path_template: data/representations/hownet/google__gemma-2-2b/post_feedforward_layernorm_output/layer_{layer}
+candidate_mining:
+  top_k_examples: 10000
+  min_feature_occurrences: 1
+  feature_pool_size: null
+  feature_pool_seed: 42
+review:
+  # The supplied 8.* HowNet notebooks stop after candidate-example mining.
+  enabled: false
+  example_source: top_absolute_examples
+  features_per_condition: 10
+  examples_per_feature: 10
+  random_seed: 42
+  judge: llm_as_judge_with_manual_verification
+  score_definition: largest_coherent_group_fraction
+output:
+  root: results/monosemanticity/HowNet/gemma2_2b/{architecture}

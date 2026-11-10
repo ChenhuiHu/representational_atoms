@@ -1,0 +1,29 @@
+extractor: sd15
+
+model:
+  path: ./stable-diffusion-v1-5
+  device: cuda
+
+dataset:
+  name: laion_coco
+  path: ./laion-coco-aesthetic
+  split: train
+  streaming: true
+  shuffle_seed: 42
+
+extraction:
+  blocks:
+    - unet.mid_block.attentions.0
+  timesteps: [0, 500, 1000]
+  features: both
+  dataset_batch_size: 1
+  start: 0
+  finish: 10000
+
+generation:
+  num_inference_steps: 50
+  guidance_scale: 7.5
+
+output:
+  root: data/representations
+  save_images: true

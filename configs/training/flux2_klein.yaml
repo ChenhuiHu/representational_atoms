@@ -1,0 +1,39 @@
+data:
+  # Directly reads a layer tar emitted by configs/extraction/flux2_klein.yaml.
+  format: webdataset_tar
+  source: flux2
+  path: data/representations/laion_coco/flux2_klein/from_0_to_10000/layer_5.tar
+  field: output.pth
+  saved_steps: [0, 3]
+  step: 0
+  sample_size: 300000
+  test_size: 16384
+  sampling_seed: 42
+
+preprocessing:
+  normalization: rms
+  eps: 1.0e-8
+  svd_eps: 1.0e-6
+
+sae:
+  expansion_factor: 54
+
+training:
+  device: cuda
+  num_epochs: 100000
+  batch_size: 4096
+  logical_batch_size: 4096
+  learning_rate: 2.0e-4
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  eval_every: 20
+  log_every: 80
+  eval_batch_size: 4096
+
+selection:
+  max_l0_for_save: 20
+  first_save_l0: 10
+  first_save_r2: 0.90
+
+output:
+  dir: saved_models/laion/flux2-klein/{architecture}/layer_5_step_0

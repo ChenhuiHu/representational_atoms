@@ -1,0 +1,37 @@
+experiment:
+  dataset: HowNet
+  model: google/gemma-2-2b
+  architecture: bijumprelu
+  layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+
+hownet:
+  source: openhownet
+  min_entities: 2
+
+features:
+  # Output of scripts/prepare_monosemanticity.py --stage candidates.
+  path_template: results/monosemanticity/HowNet/gemma2_2b/bijumprelu/layer_{layer}/candidates/feature_examples.jsonl
+  top_k_examples: 10000
+
+search:
+  min_precision: 0.5
+  min_overlap: 1
+  min_f1: 0.0
+  max_candidates_per_sememe: 4000
+  # Final manuscript setting; the original 9.* notebooks used 180 before the
+  # extended N_max search. Override to 180 for strict notebook compatibility.
+  max_features_to_merge: 800
+  require_positive_gain: true
+  sememe_batch_size: 64
+
+grid_search:
+  min_precision_values: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+  max_features_to_merge_values: [20, 40, 60, 80, 100, 120, 140, 160, 180]
+  save_per_run_results: false
+  extended:
+    enabled: true
+    min_precision: 0.5
+    max_features_to_merge_values: [200, 400, 600, 800]
+
+output:
+  root: results/semantic_alignment/HowNet/gemma2_2b

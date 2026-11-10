@@ -1,0 +1,24 @@
+extractor: llm
+
+model:
+  name: google/gemma-2-2b
+  device_map: auto
+
+dataset:
+  name: hownet
+  path: data/hownet_all_entities.json
+
+extraction:
+  mode: entity
+  position: post_feedforward_layernorm_output
+  layers: null
+  token_selection: last_non_padding
+  forward_batch_size: 64
+  shard_size: 32768
+  shuffle: true
+  seed: 42
+  device: cuda
+
+output:
+  root: data/representations
+  dtype: float32

@@ -1,0 +1,36 @@
+experiment:
+  dataset: Laion
+  model: FLUX2_Klein_9B
+  position: raw_block_output_image_tokens
+  points:
+    - {name: layer5_step0, layer: 5, step: 0}
+    - {name: layer5_step3, layer: 5, step: 3}
+    - {name: layer15_step0, layer: 15, step: 0}
+    - {name: layer15_step3, layer: 15, step: 3}
+    - {name: layer30_step0, layer: 30, step: 0}
+    - {name: layer30_step3, layer: 30, step: 3}
+sae:
+  architecture: bijumprelu
+sparse_activations:
+  path_template: results/fidelity_stability/Laion/FLUX2_Klein_9B/{architecture}/layer{layer}_step{step}/Sample300000/sae_activations.pt
+source:
+  type: spatial
+  patch_grid: [8, 8]
+  image_size: [128, 128]
+  spatial_stride: 16
+  image_archive: data/representations/laion_coco/flux2_klein/from_0_to_10000/images.tar
+candidate_mining:
+  top_k_examples: 10000
+  min_feature_occurrences: 1
+  feature_pool_size: 500
+  feature_pool_seed: 42
+review:
+  example_source: top_absolute_examples
+  features_per_condition: 10
+  examples_per_feature: 10
+  random_seed: 42
+  judge: manual
+  score_definition: largest_coherent_group_fraction
+output:
+  root: results/monosemanticity/Laion/FLUX2_Klein_9B/{architecture}
+  subdir_template: "layer{layer}_step{step}/Sample300000"
